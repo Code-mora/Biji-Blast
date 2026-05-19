@@ -1,0 +1,62 @@
+package com.bijiblast.engine;
+
+import com.bijiblast.model.Block;
+import com.bijiblast.model.Board;
+
+public class GameManager {
+
+private final Board board;
+
+private final GameEngine gameEngine;
+private final LineClearEngine lineClearEngine;
+private final ScoreManager scoreManager;
+private final GameOverChecker gameOverChecker;
+    // Constructor
+    public GameManager() {
+
+        board = new Board();
+
+        gameEngine = new GameEngine();
+        lineClearEngine = new LineClearEngine();
+        scoreManager = new ScoreManager();
+        gameOverChecker = new GameOverChecker();
+    }
+
+    // Main logic saat player naruh block
+    public boolean playMove(Block block, int row, int col) {
+
+        // Cek bisa ditaruh atau tidak
+        if (!gameEngine.canPlaceBlock(board, block, row, col)) {
+
+            System.out.println("BLOCK TIDAK BISA DITARUH");
+
+            return false;
+        }
+
+        // Taruh block
+        gameEngine.placeBlock(board, block, row, col);
+
+        // Clear line
+        lineClearEngine.clearLines(board);
+
+        // Tambah score sederhana
+        scoreManager.addScore(100);
+
+        return true;
+    }
+
+    // Cek game over
+    public boolean isGameOver(Block block) {
+        return gameOverChecker.isGameOver(board, block);
+    }
+
+    // Getter board
+    public Board getBoard() {
+        return board;
+    }
+
+    // Getter score
+    public int getScore() {
+        return scoreManager.getScore();
+    }
+}
