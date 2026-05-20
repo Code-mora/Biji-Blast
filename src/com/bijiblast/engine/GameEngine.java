@@ -5,31 +5,21 @@ import com.bijiblast.model.Board;
 
 public class GameEngine {
 
-    // Cek apakah block bisa ditaruh
     public boolean canPlaceBlock(Board board, Block block, int startRow, int startCol) {
 
-        int[][] grid = board.getGrid();
         int[][] shape = block.getShape();
 
         for (int row = 0; row < shape.length; row++) {
-
             for (int col = 0; col < shape[row].length; col++) {
 
-                // Kalau bagian block = 1
                 if (shape[row][col] == 1) {
 
-                    int boardRow = startRow + row;
-                    int boardCol = startCol + col;
+                    int r = startRow + row;
+                    int c = startCol + col;
 
-                    // Cek keluar board
-                    if (boardRow >= 8 || boardCol >= 8) {
-                        return false;
-                    }
+                    if (r >= 8 || c >= 8) return false;
 
-                    // Cek tabrakan
-                    if (grid[boardRow][boardCol] == 1) {
-                        return false;
-                    }
+                    if (board.getCell(r, c) != null) return false;
                 }
             }
         }
@@ -37,26 +27,21 @@ public class GameEngine {
         return true;
     }
 
+    public void placeBlock(Board board, Block block, int startRow, int startCol) {
 
-    // Menaruh block ke board
-public void placeBlock(Board board, Block block, int startRow, int startCol) {
+        int[][] shape = block.getShape();
 
-    int[][] grid = board.getGrid();
-    int[][] shape = block.getShape();
+        for (int row = 0; row < shape.length; row++) {
+            for (int col = 0; col < shape[row].length; col++) {
 
-    for (int row = 0; row < shape.length; row++) {
+                if (shape[row][col] == 1) {
 
-        for (int col = 0; col < shape[row].length; col++) {
+                    int r = startRow + row;
+                    int c = startCol + col;
 
-            // Kalau bagian block = 1
-            if (shape[row][col] == 1) {
-
-                int boardRow = startRow + row;
-                int boardCol = startCol + col;
-
-                grid[boardRow][boardCol] = 1;
+                    board.setCell(r, c, block.getColor());
+                }
             }
         }
     }
-}
 }

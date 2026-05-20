@@ -1,77 +1,165 @@
 package com.bijiblast.model;
 
+import java.awt.Color;
 import java.util.Random;
 
 public class Block {
 
     private int[][] shape;
 
-    // Constructor manual
-    public Block(int[][] shape) {
+    private Color color;
+
+    // =========================
+    // CONSTRUCTOR
+    // =========================
+    public Block(int[][] shape, Color color) {
+
         this.shape = shape;
+
+        this.color = color;
     }
 
-    // Getter
+    // =========================
+    // GET SHAPE
+    // =========================
     public int[][] getShape() {
+
         return shape;
     }
 
-    // Ukuran tinggi block
+    // =========================
+    // GET COLOR
+    // =========================
+    public Color getColor() {
+
+        return color;
+    }
+
+    // =========================
+    // HEIGHT
+    // =========================
     public int getHeight() {
+
         return shape.length;
     }
 
-    // Ukuran lebar block
+    // =========================
+    // WIDTH
+    // =========================
     public int getWidth() {
+
         return shape[0].length;
     }
 
-    // Generate block random (simple version)
-    public static Block randomBlock() {
+    // =========================
+    // ROTATE
+    // =========================
+    public void rotate() {
 
-        int[][][] shapes = new int[][][] {
+        int rows = shape.length;
 
-                // Kotak
-                {
-                        {1, 1},
-                        {1, 1}
-                },
+        int cols = shape[0].length;
 
-                // Garis
-                {
-                        {1, 1, 1, 1}
-                },
+        int[][] rotated =
+                new int[cols][rows];
 
-                // L shape
-                {
-                        {1, 0},
-                        {1, 0},
-                        {1, 1}
-                },
+        for (int row = 0;
+             row < rows;
+             row++) {
 
-                // T shape
-                {
-                        {1, 1, 1},
-                        {0, 1, 0}
-                },
+            for (int col = 0;
+                 col < cols;
+                 col++) {
 
-                // Single block
-                {
-                        {1}
-                }
-        };
+                rotated[col][rows - 1 - row]
+                        = shape[row][col];
+            }
+        }
 
-        Random rand = new Random();
-        return new Block(shapes[rand.nextInt(shapes.length)]);
+        shape = rotated;
     }
 
-    // Debug print block
+    // =========================
+    // RANDOM BLOCK
+    // =========================
+    public static Block randomBlock() {
+
+        Random rand = new Random();
+
+        int randomShape =
+                rand.nextInt(5);
+
+        switch (randomShape) {
+
+            // KOTAK
+            case 0:
+                return new Block(
+                        new int[][]{
+                                {1, 1},
+                                {1, 1}
+                        },
+                        new Color(255, 215, 0)
+                );
+
+            // GARIS
+            case 1:
+                return new Block(
+                        new int[][]{
+                                {1, 1, 1, 1}
+                        },
+                        new Color(0, 255, 255)
+                );
+
+            // L
+            case 2:
+                return new Block(
+                        new int[][]{
+                                {1, 0},
+                                {1, 0},
+                                {1, 1}
+                        },
+                        new Color(0, 255, 120)
+                );
+
+            // T
+            case 3:
+                return new Block(
+                        new int[][]{
+                                {1, 1, 1},
+                                {0, 1, 0}
+                        },
+                        new Color(255, 105, 180)
+                );
+
+            // SINGLE
+            default:
+                return new Block(
+                        new int[][]{
+                                {1}
+                        },
+                        new Color(255, 120, 0)
+                );
+        }
+    }
+
+    // =========================
+    // DEBUG
+    // =========================
     public void printBlock() {
 
-        for (int i = 0; i < shape.length; i++) {
-            for (int j = 0; j < shape[i].length; j++) {
-                System.out.print(shape[i][j] + " ");
+        for (int row = 0;
+             row < shape.length;
+             row++) {
+
+            for (int col = 0;
+                 col < shape[row].length;
+                 col++) {
+
+                System.out.print(
+                        shape[row][col] + " "
+                );
             }
+
             System.out.println();
         }
     }

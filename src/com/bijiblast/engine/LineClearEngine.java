@@ -2,62 +2,60 @@ package com.bijiblast.engine;
 
 import com.bijiblast.model.Board;
 
+import java.awt.Color;
+
 public class LineClearEngine {
 
-    // Clear line penuh
+    // Clear full rows / columns
     public void clearLines(Board board) {
 
-        int[][] grid = board.getGrid();
+        Color[][] grid = board.getGrid();
+
+        int size = 8;
 
         // =========================
-        // CEK BARIS
+        // CLEAR ROWS
         // =========================
-        for (int row = 0; row < 8; row++) {
+        for (int row = 0; row < size; row++) {
 
-            boolean fullRow = true;
+            boolean full = true;
 
-            for (int col = 0; col < 8; col++) {
+            for (int col = 0; col < size; col++) {
 
-                if (grid[row][col] == 0) {
-                    fullRow = false;
+                if (grid[row][col] == null) {
+                    full = false;
                     break;
                 }
             }
 
-            // Kalau penuh -> hapus
-            if (fullRow) {
+            if (full) {
 
-                for (int col = 0; col < 8; col++) {
-                    grid[row][col] = 0;
+                for (int col = 0; col < size; col++) {
+                    grid[row][col] = null;
                 }
-
-                System.out.println("BARIS " + row + " DIHAPUS");
             }
         }
 
         // =========================
-        // CEK KOLOM
+        // CLEAR COLUMNS
         // =========================
-        for (int col = 0; col < 8; col++) {
+        for (int col = 0; col < size; col++) {
 
-            boolean fullCol = true;
+            boolean full = true;
 
-            for (int row = 0; row < 8; row++) {
+            for (int row = 0; row < size; row++) {
 
-                if (grid[row][col] == 0) {
-                    fullCol = false;
+                if (grid[row][col] == null) {
+                    full = false;
                     break;
                 }
             }
 
-            // Kalau penuh -> hapus
-            if (fullCol) {
+            if (full) {
 
-                for (int row = 0; row < 8; row++) {
-                    grid[row][col] = 0;
+                for (int row = 0; row < size; row++) {
+                    grid[row][col] = null;
                 }
-
-                System.out.println("KOLOM " + col + " DIHAPUS");
             }
         }
     }

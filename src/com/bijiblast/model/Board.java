@@ -1,29 +1,31 @@
 package com.bijiblast.model;
 
+import java.awt.Color;
+
 public class Board {
 
     private final int ROWS = 8;
     private final int COLS = 8;
 
-    private int[][] grid;
+    private Color[][] grid;
 
     // Constructor
     public Board() {
-        grid = new int[ROWS][COLS];
+        grid = new Color[ROWS][COLS];
     }
 
-    // Getter board
-    public int[][] getGrid() {
+    // Getter grid
+    public Color[][] getGrid() {
         return grid;
     }
 
-    // Cek isi cell
-    public int getCell(int row, int col) {
+    // Get cell
+    public Color getCell(int row, int col) {
         return grid[row][col];
     }
 
-    // Set isi cell
-    public void setCell(int row, int col, int value) {
+    // Set cell
+    public void setCell(int row, int col, Color value) {
         grid[row][col] = value;
     }
 
@@ -31,22 +33,19 @@ public class Board {
     public void clearBoard() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                grid[row][col] = 0;
+                grid[row][col] = null;
             }
         }
     }
 
-    // Print board ke console
+    // Print board
     public void printBoard() {
-
         System.out.println("BOARD:");
 
         for (int row = 0; row < ROWS; row++) {
-
             for (int col = 0; col < COLS; col++) {
-                System.out.print(grid[row][col] + " ");
+                System.out.print((grid[row][col] == null ? 0 : 1) + " ");
             }
-
             System.out.println();
         }
     }
