@@ -2,61 +2,63 @@ package com.bijiblast.engine;
 
 import com.bijiblast.model.Block;
 import com.bijiblast.model.Board;
+import com.bijiblast.model.GameLevel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameManager {
 
-private final Board board;
+    private final Board           board;
+    private final GameEngine      gameEngine;
+    private final LineClearEngine lineClearEngine;
+    private final ScoreManager    scoreManager;
+    private final GameOverChecker gameOverChecker;
+    private final GameLevel       level;
 
-private final GameEngine gameEngine;
-private final LineClearEngine lineClearEngine;
-private final ScoreManager scoreManager;
-private final GameOverChecker gameOverChecker;
-    // Constructor
-    public GameManager() {
+    private List<int[]> lastClearedCells = new ArrayList<>();
 
-        board = new Board();
-
-        gameEngine = new GameEngine();
-        lineClearEngine = new LineClearEngine();
-        scoreManager = new ScoreManager();
-        gameOverChecker = new GameOverChecker();
+    public GameManager(GameLevel level) {
+        this.level       = level;
+        board            = new Board();
+        gameEngine       = new GameEngine();
+        lineClearEngine  = new LineClearEngine();
+        scoreManager     = new ScoreManager(level);
+        gameOverChecker  = new GameOverChecker();
     }
 
-    // Main logic saat player naruh block
+    /** Main logic saat player naruh block */
     public boolean playMove(Block block, int row, int col) {
-
-        // Cek bisa ditaruh atau tidak
         if (!gameEngine.canPlaceBlock(board, block, row, col)) {
-
             System.out.println("BLOCK TIDAK BISA DITARUH");
-
             return false;
         }
 
-        // Taruh block
         gameEngine.placeBlock(board, block, row, col);
+        lastClearedCells = lineClearEngine.clearLines(board);
 
-        // Clear line
-        lineClearEngine.clearLines(board);
-
-        // Tambah score sederhana
-        scoreManager.addScore(100);
+        int linesCleared = lineClearEngine.getLastLinesCleared();
+        if (!lastClearedCells.isEmpty()) {
+            scoreManager.addClearScore(lastClearedCells.size(), linesCleared);
+        }
 
         return true;
     }
 
-    // Cek game over
     public boolean isGameOver(Block block) {
         return gameOverChecker.isGameOver(board, block);
     }
 
-    // Getter board
-    public Board getBoard() {
-        return board;
+    /** Cek apakah block bisa ditempatkan di posisi tertentu (untuk hint) */
+    public boolean canPlace(Block block, int row, int col) {
+        return gameEngine.canPlaceBlock(board, block, row, col);
     }
 
-    // Getter score
-    public int getScore() {
-        return scoreManager.getScore();
-    }
+    public Board       getBoard()              { return board; }
+    public int         getScore()              { return scoreManager.getScore(); }
+    public int         getTotalLinesCleared()  { return scoreManager.getTotalLinesCleared(); }
+    public int         getLastClearScore()     { return scoreManager.getLastClearScore(); }
+    public String      getLastComboText()      { return scoreManager.getLastComboText(); }
+    public GameLevel   getLevel()              { return level; }
+    public List<int[]> getLastClearedCells()   { return lastClearedCells; }
 }
